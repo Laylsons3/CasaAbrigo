@@ -1,46 +1,70 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.awt.*;
+// import java.awt.event.ActionEvent;
 
 public class Screen extends JFrame{
-  public Screen() {
-    setTitle("Cadastro - Casa do Povo da Rua");
-    setVisible(true);
-    setSize(1200,800);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setResizable(false);
-    setLocationRelativeTo(null);
-    setLayout(null);
 
-    JButton buttonCadastro = new JButton("Cadastro");
-    buttonCadastro.setBounds(10, 10, 180, 55);
-    Font fontButtonCadastro = new Font("arial", Font.BOLD, 24);
-    buttonCadastro.setFont(fontButtonCadastro);
-    buttonCadastro.setForeground(new Color(0,0,0));
-    buttonCadastro.setBackground(new Color(200,200,200));
-    add(buttonCadastro);
-    
-    JButton buttonRelatorio = new JButton("Relatorio");
-    buttonRelatorio.setBounds(200, 10, 180, 55);
-    Font fontButtonRelatorio = new Font("arial", Font.BOLD, 24);
-    buttonRelatorio.setFont(fontButtonRelatorio);
-    buttonRelatorio.setForeground(new Color(0,0,0));
-    buttonRelatorio.setBackground(new Color(200,200,200));
-    add(buttonRelatorio);
+    private JTabbedPane tabbedPane;
 
-    buttonCadastro.addActionListener(this::eventoButtonCadastro);
-    buttonRelatorio.addActionListener(this::eventoButtonRelatorio);
-  }
+    public Screen() {
+        setTitle("Cadastro - Casa do Povo da Rua");
+        setSize(880, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        
+        tabbedPane = new JTabbedPane();
 
-  private void eventoButtonCadastro(ActionEvent actionEvent) {
-    JOptionPane.showMessageDialog(null, "Clicou em cadastro");
-  }
+        JPanel cadastroPanel = createCadastroPanel();
+        JPanel relatorioPanel = createRelatorioPanel();
 
-  private void eventoButtonRelatorio(ActionEvent actionEvent) {
-    JOptionPane.showMessageDialog(null, "Clicou em relatório");
-  }
+        tabbedPane.addTab("Cadastro", cadastroPanel);
+        tabbedPane.addTab("Relatórios", relatorioPanel);
 
+        add(tabbedPane);
+
+        setVisible(true);
+    }
+
+    private JPanel createCadastroPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+
+        Font fontButton = new Font("arial", Font.BOLD, 24);
+
+        JLabel textNome = new JLabel("Nome: ");
+        textNome.setBounds(10,70,100,55);
+        textNome.setFont(fontButton);
+        panel.add(textNome);
+
+        JTextField text = new JTextField();
+        text.setBounds(100,70,100,55);
+        text.setFont(fontButton);
+        panel.add(text);
+
+        JButton buttonCadastro = new JButton("Cadastrar");
+        buttonCadastro.setBounds(10, 200, 180, 55);
+        buttonCadastro.setFont(fontButton);
+        buttonCadastro.addActionListener(e -> JOptionPane.showMessageDialog(null, "Clicou em cadastro"));
+        panel.add(buttonCadastro);
+
+        return panel;
+    }
+
+    private JPanel createRelatorioPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+
+        Font fontButton = new Font("arial", Font.BOLD, 24);
+
+        JLabel labelRelatorio = new JLabel("Relatórios");
+        labelRelatorio.setBounds(10, 10, 200, 30);
+        labelRelatorio.setFont(fontButton);
+        panel.add(labelRelatorio);
+
+        return panel;
+    }
+
+    public static void main(String[] args) {
+        new Screen();
+    }
 }
