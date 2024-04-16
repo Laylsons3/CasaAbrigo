@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Screen extends JFrame{
 
@@ -97,12 +100,29 @@ public class Screen extends JFrame{
         caixaTempoRua.setFont(fontPadrao);
         panel.add(caixaTempoRua);
 
-
         //Botão de cadastro
         JButton buttonCadastro = new JButton("Cadastrar");
         buttonCadastro.setBounds(670, 170, 110, 40);
         buttonCadastro.setFont(fontPadrao);
-        buttonCadastro.addActionListener(e -> JOptionPane.showMessageDialog(null, "Clicou em cadastro"));
+        buttonCadastro.addActionListener(e -> {
+            String local = caixaLocal.getText();
+            String data = caixaData.getText();
+            String nome = caixaNome.getText();
+            String sexo = (String) comboBoxSexo.getSelectedItem();
+            String idade = caixaIdade.getText();
+            String profissao = caixaProfissao.getText();
+            String tempoDeRua = caixaTempoRua.getText();
+            String usuario = "admin";
+
+            String arquivoCSV = "dados.csv";
+
+            try (PrintWriter writer = new PrintWriter(new FileWriter(arquivoCSV, true))) {
+                writer.println(local + "," + data + "," + nome+","+sexo+","+idade+","+profissao+","+tempoDeRua+","+usuario);
+                JOptionPane.showMessageDialog(null, "Dados salvos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ioException) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar os dados: " + ioException.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         panel.add(buttonCadastro);
 
         return panel;
@@ -112,7 +132,7 @@ public class Screen extends JFrame{
         JPanel panel = new JPanel();
         panel.setLayout(null);
 
-        Font fontPadrao = new Font("arial", Font.BOLD, 24);
+        Font fontPadrao = new Font("arial", Font.BOLD, 14);
 
         JLabel labelRelatorio = new JLabel("Relatórios");
         labelRelatorio.setBounds(10, 10, 200, 30);
