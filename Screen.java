@@ -82,14 +82,14 @@ public class Screen extends JFrame{
         caixaIdade.setFont(fontPadrao);
         panel.add(caixaIdade);
 
-        JLabel textProfissao = new JLabel("Profissão: ");
-        textProfissao.setBounds(540,100,100,30);
-        textProfissao.setFont(fontPadrao);
-        panel.add(textProfissao);
-        JTextField caixaProfissao = new JTextField();
-        caixaProfissao.setBounds(540,130,120,30);
-        caixaProfissao.setFont(fontPadrao);
-        panel.add(caixaProfissao);
+        JLabel textOcupacao = new JLabel("Ocupação: ");
+        textOcupacao.setBounds(540,100,100,30);
+        textOcupacao.setFont(fontPadrao);
+        panel.add(textOcupacao);
+        JTextField caixaOcupacao = new JTextField();
+        caixaOcupacao.setBounds(540,130,120,30);
+        caixaOcupacao.setFont(fontPadrao);
+        panel.add(caixaOcupacao);
 
         JLabel textTempoRua = new JLabel("Tempo de rua: ");
         textTempoRua.setBounds(670,100,100,30);
@@ -105,24 +105,33 @@ public class Screen extends JFrame{
         buttonCadastro.setBounds(670, 170, 110, 40);
         buttonCadastro.setFont(fontPadrao);
         buttonCadastro.addActionListener(e -> {
+
             String local = caixaLocal.getText();
             String data = caixaData.getText();
             String nome = caixaNome.getText();
             String sexo = (String) comboBoxSexo.getSelectedItem();
             String idade = caixaIdade.getText();
-            String profissao = caixaProfissao.getText();
+            String ocupacao = caixaOcupacao.getText();
             String tempoDeRua = caixaTempoRua.getText();
+            
             String usuario = "admin";
 
             String arquivoCSV = "dados.csv";
 
-            try (PrintWriter writer = new PrintWriter(new FileWriter(arquivoCSV, true))) {
-                writer.println(local + "," + data + "," + nome+","+sexo+","+idade+","+profissao+","+tempoDeRua+","+usuario);
+            try (
+                PrintWriter writer = 
+                    new PrintWriter(
+                    new FileWriter(arquivoCSV, true))
+                    ) {
+                writer.println(local + "," + data + "," + nome+"," + sexo + "," + idade + "," + ocupacao + "," + tempoDeRua + "," + usuario);
+
                 JOptionPane.showMessageDialog(null, "Dados salvos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
             } catch (IOException ioException) {
                 JOptionPane.showMessageDialog(null, "Erro ao salvar os dados: " + ioException.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
+
         panel.add(buttonCadastro);
 
         return panel;
