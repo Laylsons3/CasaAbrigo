@@ -1,19 +1,29 @@
+package view;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class Screen extends JFrame{
+public class Cadastro extends JFrame {
 
+	private static final long serialVersionUID = 1L;
     private JTabbedPane tabbedPane;
 
-    public Screen() {
+	public Cadastro() {
+		
+		setTitle("Cadastro - Casa do Povo da Rua");
+        setSize(810, 600);
+        setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		
         setTitle("Cadastro - Casa do Povo da Rua");
         setSize(810, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        
+
         tabbedPane = new JTabbedPane();
 
         JPanel cadastroPanel = createCadastroPanel();
@@ -22,136 +32,162 @@ public class Screen extends JFrame{
         tabbedPane.addTab("Cadastro", cadastroPanel);
         tabbedPane.addTab("Relatórios", relatorioPanel);
 
-        add(tabbedPane);
+        getContentPane().add(tabbedPane);
 
         setVisible(true);
-    }
+		
+	}
+	
+    private class Pessoa {
+        String local, nome, sexo, ocupacao;
+        String data;
+        int idade, tempoDeRua;
+        String usuario = "admin";
+        
+        public void setPessoa(String local, String nome, String sexo, String ocupacao, String data, int idade, int tempoDeRua) {
+            this.local = local;
+            this.nome = nome;
+            this.sexo = sexo;
+            this.ocupacao = ocupacao;
+            this.data = data;
+            this.idade = idade;
+            this.tempoDeRua = tempoDeRua;
+        }
 
+        public String getPessoa(){
+            return local + "," + data + "," + nome+"," + sexo + "," + idade + "," + ocupacao + "," + tempoDeRua + "," + usuario;
+        }
+
+    }
+    
     private JPanel createCadastroPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
+
+        JPanel panelCadastro = new JPanel();
+        panelCadastro.setLayout(null);
 
         Font fontPadrao = new Font("arial", Font.PLAIN, 14);
 
-        //Dados do local
         JLabel textLocal = new JLabel("Local: ");
         textLocal.setBounds(10,10,100,30);
         textLocal.setFont(fontPadrao);
-        panel.add(textLocal);
+        panelCadastro.add(textLocal);
         JTextField caixaLocal = new JTextField();
+
         caixaLocal.setBounds(70,10,300,30);
         caixaLocal.setFont(fontPadrao);
         caixaLocal.setText("Casa do Povo da Rua");
-        panel.add(caixaLocal);
+        panelCadastro.add(caixaLocal);
 
         JLabel textData = new JLabel("Data: ");
         textData.setBounds(10,40,100,30);
         textData.setFont(fontPadrao);
-        panel.add(textData);
+        panelCadastro.add(textData);
         JTextField caixaData = new JTextField();
         caixaData.setBounds(70,40,300,30);
         caixaData.setFont(fontPadrao);
-        panel.add(caixaData);
+        panelCadastro.add(caixaData);
 
-        //Dados da Pessoa
         JLabel textNome = new JLabel("Nome: ");
         textNome.setBounds(10,100,100,30);
         textNome.setFont(fontPadrao);
-        panel.add(textNome);
+        panelCadastro.add(textNome);
+
         JTextField caixaNome = new JTextField();
         caixaNome.setBounds(10,130,300,30);
         caixaNome.setFont(fontPadrao);
-        panel.add(caixaNome);
+        panelCadastro.add(caixaNome);
 
         JLabel textSexo = new JLabel("Sexo: ");
         textSexo.setBounds(320,100,130,30);
         textSexo.setFont(fontPadrao);
-        panel.add(textSexo);
+        panelCadastro.add(textSexo);
         String[] opcoesSexo = {"Masculino", "Feminino", "Prefiro não dizer"};
         JComboBox<String> comboBoxSexo = new JComboBox<>(opcoesSexo);
         comboBoxSexo.setBounds(320,130,130,30);
         comboBoxSexo.setFont(fontPadrao);
-        panel.add(comboBoxSexo);
+        panelCadastro.add(comboBoxSexo);
 
         JLabel textIdade = new JLabel("Idade: ");
         textIdade.setBounds(460,100,100,30);
         textIdade.setFont(fontPadrao);
-        panel.add(textIdade);
+        panelCadastro.add(textIdade);
         JTextField caixaIdade = new JTextField();
         caixaIdade.setBounds(460,130,70,30);
         caixaIdade.setFont(fontPadrao);
-        panel.add(caixaIdade);
+        panelCadastro.add(caixaIdade);
 
         JLabel textOcupacao = new JLabel("Ocupação: ");
         textOcupacao.setBounds(540,100,100,30);
         textOcupacao.setFont(fontPadrao);
-        panel.add(textOcupacao);
+        panelCadastro.add(textOcupacao);
         JTextField caixaOcupacao = new JTextField();
         caixaOcupacao.setBounds(540,130,120,30);
         caixaOcupacao.setFont(fontPadrao);
-        panel.add(caixaOcupacao);
+        panelCadastro.add(caixaOcupacao);
 
         JLabel textTempoRua = new JLabel("Tempo de rua: ");
         textTempoRua.setBounds(670,100,100,30);
         textTempoRua.setFont(fontPadrao);
-        panel.add(textTempoRua);
+        panelCadastro.add(textTempoRua);
         JTextField caixaTempoRua = new JTextField();
         caixaTempoRua.setBounds(670,130,110,30);
         caixaTempoRua.setFont(fontPadrao);
-        panel.add(caixaTempoRua);
+        panelCadastro.add(caixaTempoRua);
 
-        //Botão de cadastro
         JButton buttonCadastro = new JButton("Cadastrar");
         buttonCadastro.setBounds(670, 170, 110, 40);
         buttonCadastro.setFont(fontPadrao);
-        buttonCadastro.addActionListener(e -> {
 
+        
+        buttonCadastro.addActionListener(e -> {
             String local = caixaLocal.getText();
             String data = caixaData.getText();
             String nome = caixaNome.getText();
             String sexo = (String) comboBoxSexo.getSelectedItem();
-            String idade = caixaIdade.getText();
+            int idade = Integer.parseInt(caixaIdade.getText());
             String ocupacao = caixaOcupacao.getText();
-            String tempoDeRua = caixaTempoRua.getText();
+            int tempoDeRua = Integer.parseInt(caixaTempoRua.getText());
             
-            String usuario = "admin";
+            Pessoa pessoa = new Pessoa();
+            pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
 
-            String arquivoCSV = "dados.csv";
+            String diretorioAtual = System.getProperty("user.dir");
+            String arquivoCSV = diretorioAtual + File.separator + "dados.csv";
 
-            try (
-                PrintWriter writer = 
-                    new PrintWriter(
-                    new FileWriter(arquivoCSV, true))
-                    ) {
-                writer.println(local + "," + data + "," + nome+"," + sexo + "," + idade + "," + ocupacao + "," + tempoDeRua + "," + usuario);
+            try (PrintWriter writer = new PrintWriter(new FileWriter(arquivoCSV, true))) {
+                writer.println(pessoa.getPessoa());
 
                 JOptionPane.showMessageDialog(null, "Dados salvos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
+                caixaNome.setText("");
+                caixaIdade.setText("");
+                caixaOcupacao.setText("");
+                caixaTempoRua.setText("");
+
             } catch (IOException ioException) {
                 JOptionPane.showMessageDialog(null, "Erro ao salvar os dados: " + ioException.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                ioException.printStackTrace();
             }
+            
         });
+        
+        panelCadastro.add(buttonCadastro);
 
-        panel.add(buttonCadastro);
-
-        return panel;
+        return panelCadastro;
     }
-
+    
     private JPanel createRelatorioPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
+        JPanel panelRelatorio = new JPanel();
+        panelRelatorio.setLayout(null);
 
         Font fontPadrao = new Font("arial", Font.BOLD, 14);
 
         JLabel labelRelatorio = new JLabel("Relatórios");
         labelRelatorio.setBounds(10, 10, 200, 30);
         labelRelatorio.setFont(fontPadrao);
-        panel.add(labelRelatorio);
+        panelRelatorio.add(labelRelatorio);
 
-        return panel;
+        return panelRelatorio;
     }
 
-    public static void main(String[] args) {
-        new Screen();
-    }
 }
