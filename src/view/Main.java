@@ -8,9 +8,6 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-          /**
-           * Alterar para a tela que vai chamar 
-           */
 					Login frame = new Login();
 					frame.setVisible(true);
 				} catch (Exception e) {

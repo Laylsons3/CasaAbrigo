@@ -35,10 +35,6 @@ public class Login extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
-
-		/**
-		 * Adicionando interface
-		 */
 		
 		JPanel panelEsquerdo = new JPanel();
 		panelEsquerdo.setBackground(new Color(95, 158, 160));
@@ -51,13 +47,13 @@ public class Login extends JFrame {
 		caixaImagemETitulo.setBounds(89, 147, 213, 217);
 		panelEsquerdo.add(caixaImagemETitulo);
 				
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\layls\\eclipse-workspace\\CasaAbrigo\\src\\assets\\logo-menor.jpg"));
-		caixaImagemETitulo.add(lblNewLabel);
+		JLabel labelImage = new JLabel("");
+		labelImage.setIcon(new ImageIcon("C:\\Users\\layls\\eclipse-workspace\\CasaAbrigo\\src\\assets\\logo-menor.jpg"));
+		caixaImagemETitulo.add(labelImage);
 		
-		JLabel lblNewLabel_1 = new JLabel("CASA DO POVO DA RUA");
-		lblNewLabel_1.setFont(new Font("Poppins", Font.BOLD, 16));
-		caixaImagemETitulo.add(lblNewLabel_1);
+		JLabel labelTitulo = new JLabel("CASA DO POVO DA RUA");
+		labelTitulo.setFont(new Font("Poppins", Font.BOLD, 16));
+		caixaImagemETitulo.add(labelTitulo);
 		
 		JPanel panelDireito = new JPanel();
 		panelDireito.setBackground(new Color(255, 255, 255));
