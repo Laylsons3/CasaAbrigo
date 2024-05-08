@@ -4,19 +4,17 @@ import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class Cadastro extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+    public static final String caminhoArquivo = "dados.csv";
     private JTabbedPane tabbedPane;
-    private JTable table;
 
 	public Cadastro() {
 		
@@ -122,7 +120,6 @@ public class Cadastro extends JFrame {
         JButton buttonCadastro = new JButton("Cadastrar");
         buttonCadastro.setBounds(670, 170, 110, 40);
         buttonCadastro.setFont(fontPadrao);
-
         
         buttonCadastro.addActionListener(e -> {
             String local = caixaLocal.getText();
@@ -135,10 +132,8 @@ public class Cadastro extends JFrame {
             
             Pessoa pessoa = new Pessoa();
             pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
-
-            String arquivoCSV = "dados.csv";
             
-            try (PrintWriter writer = new PrintWriter(new FileWriter(arquivoCSV, true))) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(caminhoArquivo, true))) {
                 writer.println(pessoa.getPessoa());
 
                 JOptionPane.showMessageDialog(null, "Dados salvos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -153,20 +148,18 @@ public class Cadastro extends JFrame {
                 ioException.printStackTrace();
             }
 
-            
         });
         
         panelCadastro.add(buttonCadastro);
 
         return panelCadastro;
     }
-    
 
     public static ArrayList<Pessoa> ListarDados() {
         ArrayList<Pessoa> lista = new ArrayList<>();
         
         try {
-            BufferedReader leitor = new BufferedReader(new FileReader("dados.csv"));
+            BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivo));
             String linha;
             
             while ((linha = leitor.readLine()) != null) {
@@ -179,10 +172,6 @@ public class Cadastro extends JFrame {
                 int idade = Integer.parseInt(partes[4]);
                 String ocupacao = partes[5];
                 int tempoDeRua = Integer.parseInt(partes[6]);
-                
-                /**
-                 * String usuario = partes[7];
-                 */
                 
                 Pessoa pessoa = new Pessoa();
                 pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
@@ -215,7 +204,6 @@ public class Cadastro extends JFrame {
 
         return table;
     }
-
     
     private JPanel createRelatorioPanel() {
         JPanel panelRelatorio = new JPanel();
