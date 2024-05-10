@@ -1,42 +1,88 @@
 package view;
 
-import java.awt.EventQueue;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
-public class Relatorio extends JFrame {
+import view.Pessoa;
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+public class Relatorio {
+    public static final String caminhoArquivo = "dados.csv";
+    
+    public static ArrayList<Pessoa> ListarDados() {
+        ArrayList<Pessoa> lista = new ArrayList<>();
+        
+        try {
+            BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivo));
+            String linha;
+            
+            while ((linha = leitor.readLine()) != null) {
+                String[] partes = linha.split(",");
+                
+                String local = partes[0];
+                String data = partes[1];
+                String nome = partes[2];
+                String sexo = partes[3];
+                int idade = Integer.parseInt(partes[4]);
+                String ocupacao = partes[5];
+                int tempoDeRua = Integer.parseInt(partes[6]);
+                
+                Pessoa pessoa = new Pessoa();
+                pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
+                
+                lista.add(pessoa);
+            }
+            leitor.close();
+            
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+        return lista;
+    }
+    public JTable createTable() {
+        String[] colunas = {"Local", "Data", "Nome", "Sexo", "Idade", "Ocupação", "Tempo de Rua", "Usuário"};
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Relatorio frame = new Relatorio();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+        ArrayList<Pessoa> dados = ListarDados();
 
-	/**
-	 * Create the frame.
-	 */
-	public Relatorio() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        DefaultTableModel model = new DefaultTableModel(colunas, 0);
 
-		setContentPane(contentPane);
-	}
+        for (Pessoa pessoa : dados) {
+            model.addRow(pessoa.toArray());
+        }
 
+        JTable table = new JTable(model);
+
+        table.setPreferredScrollableViewportSize(new Dimension(700, 400));
+        table.setFillsViewportHeight(true);
+
+        return table;
+    }
+    
+    public JPanel createRelatorioPanel() {
+        JPanel panelRelatorio = new JPanel();
+        panelRelatorio.setLayout(new BorderLayout());
+
+        Font fontPadrao = new Font("arial", Font.BOLD, 14);
+
+        JLabel labelRelatorio = new JLabel("Relatórios");
+        labelRelatorio.setBounds(10, 10, 200, 30);
+        labelRelatorio.setFont(fontPadrao);
+        panelRelatorio.add(labelRelatorio, BorderLayout.NORTH);
+
+        JScrollPane scrollPane = new JScrollPane(createTable());
+        panelRelatorio.add(scrollPane, BorderLayout.CENTER);
+
+        return panelRelatorio;
+    }
+    
 }
