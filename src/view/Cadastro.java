@@ -1,4 +1,4 @@
-package view;
+ package view;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,13 +17,13 @@ public class Cadastro extends JFrame {
     private JTabbedPane tabbedPane;
 
 	public Cadastro() {
-		
+
 		setTitle("Cadastro - Casa do Povo da Rua");
         setSize(810, 600);
         setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		
+
         setTitle("Cadastro - Casa do Povo da Rua");
         setSize(810, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,15 +32,15 @@ public class Cadastro extends JFrame {
         tabbedPane = new JTabbedPane();
 
         JPanel cadastroPanel = createCadastroPanel();
-        JPanel relatorioPanel = createRelatorioPanel();
+        // JPanel relatorioPanel = createRelatorioPanel();
 
         tabbedPane.addTab("Cadastro", cadastroPanel);
-        tabbedPane.addTab("Relatórios", relatorioPanel);
+        // tabbedPane.addTab("Relatórios", relatorioPanel);
 
         getContentPane().add(tabbedPane);
 
         setVisible(true);
-		
+
 	}
     
 
@@ -66,6 +66,7 @@ public class Cadastro extends JFrame {
         textData.setBounds(10,40,100,30);
         textData.setFont(fontPadrao);
         panelCadastro.add(textData);
+
         JTextField caixaData = new JTextField();
         caixaData.setBounds(70,40,300,30);
         caixaData.setFont(fontPadrao);
@@ -86,6 +87,7 @@ public class Cadastro extends JFrame {
         textSexo.setFont(fontPadrao);
         panelCadastro.add(textSexo);
         String[] opcoesSexo = {"Masculino", "Feminino", "Prefiro não dizer"};
+
         JComboBox<String> comboBoxSexo = new JComboBox<>(opcoesSexo);
         comboBoxSexo.setBounds(320,130,130,30);
         comboBoxSexo.setFont(fontPadrao);
@@ -104,6 +106,7 @@ public class Cadastro extends JFrame {
         textOcupacao.setBounds(540,100,100,30);
         textOcupacao.setFont(fontPadrao);
         panelCadastro.add(textOcupacao);
+
         JTextField caixaOcupacao = new JTextField();
         caixaOcupacao.setBounds(540,130,120,30);
         caixaOcupacao.setFont(fontPadrao);
@@ -121,8 +124,12 @@ public class Cadastro extends JFrame {
         JButton buttonCadastro = new JButton("Cadastrar");
         buttonCadastro.setBounds(670, 170, 110, 40);
         buttonCadastro.setFont(fontPadrao);
+
+        //BOTÃO
+        panelCadastro.add(buttonCadastro);
         
         buttonCadastro.addActionListener(e -> {
+
             String local = caixaLocal.getText();
             String data = caixaData.getText();
             String nome = caixaNome.getText();
@@ -130,10 +137,10 @@ public class Cadastro extends JFrame {
             int idade = Integer.parseInt(caixaIdade.getText());
             String ocupacao = caixaOcupacao.getText();
             int tempoDeRua = Integer.parseInt(caixaTempoRua.getText());
-            
+
             Pessoa pessoa = new Pessoa();
             pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
-            
+
             try (PrintWriter writer = new PrintWriter(new FileWriter(caminhoArquivo, true))) {
                 writer.println(pessoa.getPessoa());
 
@@ -149,63 +156,75 @@ public class Cadastro extends JFrame {
                 ioException.printStackTrace();
             }
 
-        });
-        
-        panelCadastro.add(buttonCadastro);
+            dispose();
+            new Cadastro();
 
+        });
+
+        // AQUI
+        JScrollPane scrollPane = new JScrollPane(createTable());
+        scrollPane.setBounds(10, 218, 770, 308);
+		scrollPane.setVisible(true);
+		
+        panelCadastro.add(scrollPane, BorderLayout.CENTER);
+        
         return panelCadastro;
     }
 	
-	    public static ArrayList<Pessoa> ListarDados() {
-	        ArrayList<Pessoa> lista = new ArrayList<>();
-	        
-	        try {
-	            BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivo));
-	            String linha;
-	            
-	            while ((linha = leitor.readLine()) != null) {
-	                String[] partes = linha.split(",");
-	                
-	                String local = partes[0];
-	                String data = partes[1];
-	                String nome = partes[2];
-	                String sexo = partes[3];
-	                int idade = Integer.parseInt(partes[4]);
-	                String ocupacao = partes[5];
-	                int tempoDeRua = Integer.parseInt(partes[6]);
-	                
-	                Pessoa pessoa = new Pessoa();
-	                pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
-	                
-	                lista.add(pessoa);
-	            }
-	            leitor.close();
-	            
-	        } catch (IOException ioException) {
-	            ioException.printStackTrace();
-	        }
-	        return lista;
-	    }
+    // PUXAR DADOS DO CSV
+    public static ArrayList<Pessoa> ListarDados() {
+        ArrayList<Pessoa> lista = new ArrayList<>();
+        
+        try {
+            BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivo));
+            String linha;
+            
+            while ((linha = leitor.readLine()) != null) {
+                String[] partes = linha.split(",");
+                
+                String local = partes[0];
+                String data = partes[1];
+                String nome = partes[2];
+                String sexo = partes[3];
+                int idade = Integer.parseInt(partes[4]);
+                String ocupacao = partes[5];
+                int tempoDeRua = Integer.parseInt(partes[6]);
+                
+                Pessoa pessoa = new Pessoa();
+                pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
+                
+                lista.add(pessoa);
+            }
+            leitor.close();
+            
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+        return lista;
+    }
+
 	public JTable createTable() {
 		String[] colunas = {"Local", "Data", "Nome", "Sexo", "Idade", "Ocupação", "Tempo de Rua", "Usuário"};
 		
 		ArrayList<Pessoa> dados = ListarDados();
-		
+
 		DefaultTableModel model = new DefaultTableModel(colunas, 0);
-		
+
 		for (Pessoa pessoa : dados) {
 			model.addRow(pessoa.toArray());
 		}
-		
+
 		JTable table = new JTable(model);
 		
 		table.setPreferredScrollableViewportSize(new Dimension(700, 400));
 		table.setFillsViewportHeight(true);
+		table.setVisible(true);
 		
 		return table;
 	}
 	    
-	    
+	 
+	/*
 	private JPanel createRelatorioPanel() {
 		JPanel panelRelatorio = new JPanel();
 		panelRelatorio.setLayout(new BorderLayout());
@@ -222,6 +241,11 @@ public class Cadastro extends JFrame {
 		
 		return panelRelatorio;
 	}
+	*/
 
+    public static void main(String[] args) {
+        new Cadastro();
+    }
+	
 
 }

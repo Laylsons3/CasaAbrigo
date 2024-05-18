@@ -14,7 +14,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import view.Pessoa;
 
 public class Relatorio {
     public static final String caminhoArquivo = "dados.csv";
