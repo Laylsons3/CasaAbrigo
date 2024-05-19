@@ -1,12 +1,11 @@
 package view;
-
 import java.util.Vector;
 
 public class Pessoa {
-    String local, nome, sexo, ocupacao;
-    String data;
-    int idade, tempoDeRua;
-    String usuario = "admin";
+    private String local, nome, sexo, ocupacao;
+    private String data;
+    private int idade, tempoDeRua;
+    private String usuario = "admin";
     
     public void setPessoa(String local, String nome, String sexo, String ocupacao, String data, int idade, int tempoDeRua) {
         this.local = local;
@@ -34,5 +33,4 @@ public class Pessoa {
         vetor.add(usuario);
         return vetor;
     }
-
 }
