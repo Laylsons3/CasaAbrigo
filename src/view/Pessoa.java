@@ -21,11 +21,16 @@ public class Pessoa {
         return local + "," + data + "," + nome+"," + sexo + "," + idade + "," + ocupacao + "," + tempoDeRua + "," + usuario;
     }
 
+    public void setPessoaCadastro(String nome, String data) {
+        this.nome = nome;
+        this.data = data;
+    }
+
     public Vector<String> toArray() {
         Vector<String> vetor = new Vector<>();
-        vetor.add(local);
-        vetor.add(data);
         vetor.add(nome);
+        vetor.add(data);
+        vetor.add(local);
         vetor.add(sexo);
         vetor.add(String.valueOf(idade));
         vetor.add(ocupacao);

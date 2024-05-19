@@ -12,8 +12,9 @@ import java.io.PrintWriter;
 public class Cadastro extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    public static final String CAMINHO_ARQUIVO = "dados.csv";
     private static final Font FONT_PADRAO = new Font("Arial", Font.PLAIN, 14);
+    public static final String CAMINHO_ARQUIVO = "dados.csv";
+
     private JTabbedPane tabbedPane;
     private JTextField caixaLocal, caixaData, caixaNome, caixaIdade, caixaOcupacao, caixaTempoRua;
     private JComboBox<String> comboBoxSexo;
@@ -41,100 +42,109 @@ public class Cadastro extends JFrame {
         JLabel textLocal = new JLabel("Local: ");
         textLocal.setBounds(10, 10, 100, 30);
         textLocal.setFont(FONT_PADRAO);
-        panelCadastro.add(textLocal);
-
+        
         caixaLocal = new JTextField();
         caixaLocal.setBounds(70, 10, 300, 30);
         caixaLocal.setFont(FONT_PADRAO);
         caixaLocal.setText("Casa do Povo da Rua");
-        panelCadastro.add(caixaLocal);
-
+        
         JLabel textData = new JLabel("Data: ");
         textData.setBounds(10, 40, 100, 30);
         textData.setFont(FONT_PADRAO);
-        panelCadastro.add(textData);
-
+        
         caixaData = new JTextField();
         caixaData.setBounds(70, 40, 300, 30);
         caixaData.setFont(FONT_PADRAO);
         caixaData.setText("18/05/2024");
-        panelCadastro.add(caixaData);
-
+        
         JLabel textNome = new JLabel("Nome: ");
         textNome.setBounds(10, 100, 100, 30);
         textNome.setFont(FONT_PADRAO);
-        panelCadastro.add(textNome);
-
+        
         caixaNome = new JTextField();
         caixaNome.setBounds(10, 130, 300, 30);
         caixaNome.setFont(FONT_PADRAO);
         caixaNome.setText("Nome teste");
-        panelCadastro.add(caixaNome);
-
+        
         JLabel textSexo = new JLabel("Sexo: ");
         textSexo.setBounds(320, 100, 130, 30);
         textSexo.setFont(FONT_PADRAO);
-        panelCadastro.add(textSexo);
         String[] opcoesSexo = {"Masculino", "Feminino", "Prefiro não dizer"};
-
+        
         comboBoxSexo = new JComboBox<>(opcoesSexo);
         comboBoxSexo.setBounds(320, 130, 130, 30);
         comboBoxSexo.setFont(FONT_PADRAO);
-        panelCadastro.add(comboBoxSexo);
-
+        
         JLabel textIdade = new JLabel("Idade: ");
         textIdade.setBounds(460, 100, 100, 30);
         textIdade.setFont(FONT_PADRAO);
-        panelCadastro.add(textIdade);
-
+        
         caixaIdade = new JTextField();
         caixaIdade.setBounds(460, 130, 70, 30);
         caixaIdade.setFont(FONT_PADRAO);
         caixaIdade.setText(Integer.toString(25));
-        panelCadastro.add(caixaIdade);
-
+        
         JLabel textOcupacao = new JLabel("Ocupação: ");
         textOcupacao.setBounds(540, 100, 100, 30);
         textOcupacao.setFont(FONT_PADRAO);
-        panelCadastro.add(textOcupacao);
-
+        
         caixaOcupacao = new JTextField();
         caixaOcupacao.setBounds(540, 130, 120, 30);
         caixaOcupacao.setFont(FONT_PADRAO);
         caixaOcupacao.setText("OCUPAÇÃO");
-        panelCadastro.add(caixaOcupacao);
-
+        
         JLabel textTempoRua = new JLabel("Tempo de rua: ");
         textTempoRua.setBounds(670, 100, 100, 30);
         textTempoRua.setFont(FONT_PADRAO);
-        panelCadastro.add(textTempoRua);
-
+        
         caixaTempoRua = new JTextField();
         caixaTempoRua.setBounds(670, 130, 110, 30);
         caixaTempoRua.setFont(FONT_PADRAO);
         caixaTempoRua.setText(Integer.toString(4));
-        panelCadastro.add(caixaTempoRua);
-
+        
         // Botão Cadastrar
         JButton buttonCadastro = new JButton("Cadastrar");
         buttonCadastro.setBounds(670, 170, 110, 40);
         buttonCadastro.setFont(FONT_PADRAO);
         buttonCadastro.addActionListener(e -> cadastrarPessoa());
-        panelCadastro.add(buttonCadastro);
-
+        
         // Botão Limpar Campos
         JButton buttonLimpar = new JButton("Limpar");
         buttonLimpar.setBounds(550, 170, 110, 40);
         buttonLimpar.setFont(FONT_PADRAO);
         buttonLimpar.addActionListener(e -> limparCampos());
-        panelCadastro.add(buttonLimpar);
-
+        
         // Tabela
-        tableModel = new DefaultTableModel(new String[]{"Local", "Data", "Nome", "Sexo", "Idade", "Ocupação", "Tempo de Rua"}, 0);
+        tableModel = new DefaultTableModel(new String[]{
+            // "Local",
+            "Nome",
+            "Data",
+            // "Sexo",
+            // "Idade",
+            // "Ocupação",
+            // "Tempo de Rua"
+        }, 0);
         JTable table = new JTable(tableModel);
         tabelaScrollPane = new JScrollPane(table);
         tabelaScrollPane.setBounds(10, 218, 770, 308);
         tabelaScrollPane.setVisible(true);
+
+        panelCadastro.add(textLocal);
+        panelCadastro.add(caixaLocal);
+        panelCadastro.add(textData);
+        panelCadastro.add(caixaData);
+        panelCadastro.add(textNome);
+        panelCadastro.add(caixaNome);
+        panelCadastro.add(textSexo);
+        panelCadastro.add(comboBoxSexo);
+        panelCadastro.add(textIdade);
+        panelCadastro.add(caixaIdade);
+        panelCadastro.add(textOcupacao);
+        panelCadastro.add(caixaOcupacao);
+        panelCadastro.add(textTempoRua);
+        panelCadastro.add(caixaTempoRua);
+        panelCadastro.add(buttonCadastro);
+        panelCadastro.add(buttonLimpar);
         panelCadastro.add(tabelaScrollPane, BorderLayout.CENTER);
 
         atualizarTabela(); // Carrega os dados iniciais
@@ -151,15 +161,19 @@ public class Cadastro extends JFrame {
         String ocupacao = caixaOcupacao.getText();
         int tempoDeRua = Integer.parseInt(caixaTempoRua.getText());
 
-        Pessoa pessoa = new Pessoa();
-        pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
-
         try (PrintWriter writer = new PrintWriter(new FileWriter(CAMINHO_ARQUIVO, true))) {
+            Pessoa pessoa = new Pessoa();
+            pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
+            
             writer.println(pessoa.getPessoa());
 
-            JOptionPane.showMessageDialog(this, "Dados salvos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            limparCampos();
-            atualizarTabela(); // Atualiza a tabela com os novos dados
+            // JOptionPane.showMessageDialog(this, "Dados salvos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            // limparCampos();
+            // atualizarTabela(); // Atualiza a tabela com os novos dados
+
+            dispose();
+            new Cadastro();
+
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar os dados: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -185,16 +199,16 @@ public class Cadastro extends JFrame {
             while ((linha = leitor.readLine()) != null) {
                 String[] partes = linha.split(",");
 
-                String local = partes[0];
+                // String local = partes[0];
                 String data = partes[1];
                 String nome = partes[2];
-                String sexo = partes[3];
-                int idade = Integer.parseInt(partes[4]);
-                String ocupacao = partes[5];
-                int tempoDeRua = Integer.parseInt(partes[6]);
+                // String sexo = partes[3];
+                // int idade = Integer.parseInt(partes[4]);
+                // String ocupacao = partes[5];
+                // int tempoDeRua = Integer.parseInt(partes[6]);
 
                 Pessoa pessoa = new Pessoa();
-                pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
+                pessoa.setPessoaCadastro(nome,data);
 
                 lista.add(pessoa);
             }

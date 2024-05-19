@@ -10,13 +10,13 @@ public class MainComSQL {
     // private static final String URL = "jdbc:postgresql://localhost:5432/bdempresalaylson";
     // private static final String USER = "postgres";
     // private static final String PASSWORD = "sql1234";
-    
+
   public static void main(String[] args) {
 
     //   Connection conn = null;
     //   PreparedStatement pstmt = null;
-	  
-	//   try {
+
+	  //   try {
     //       conn = DriverManager.getConnection(URL, USER, PASSWORD);
 
     //       String sql = "INSERT INTO produto VALUES (?, ?, ?, ?)";
