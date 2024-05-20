@@ -55,7 +55,7 @@ public class Cadastro extends JFrame {
         caixaData = new JTextField();
         caixaData.setBounds(70, 40, 300, 30);
         caixaData.setFont(FONT_PADRAO);
-        caixaData.setText("18/05/2024");
+        // caixaData.setText("18/05/2024");
         
         JLabel textNome = new JLabel("Nome: ");
         textNome.setBounds(10, 100, 100, 30);
@@ -64,7 +64,7 @@ public class Cadastro extends JFrame {
         caixaNome = new JTextField();
         caixaNome.setBounds(10, 130, 300, 30);
         caixaNome.setFont(FONT_PADRAO);
-        caixaNome.setText("Nome teste");
+        // caixaNome.setText("Nome teste");
         
         JLabel textSexo = new JLabel("Sexo: ");
         textSexo.setBounds(320, 100, 130, 30);
@@ -82,7 +82,7 @@ public class Cadastro extends JFrame {
         caixaIdade = new JTextField();
         caixaIdade.setBounds(460, 130, 70, 30);
         caixaIdade.setFont(FONT_PADRAO);
-        caixaIdade.setText(Integer.toString(25));
+        // caixaIdade.setText(Integer.toString(25));
         
         JLabel textOcupacao = new JLabel("Ocupação: ");
         textOcupacao.setBounds(540, 100, 100, 30);
@@ -91,7 +91,7 @@ public class Cadastro extends JFrame {
         caixaOcupacao = new JTextField();
         caixaOcupacao.setBounds(540, 130, 120, 30);
         caixaOcupacao.setFont(FONT_PADRAO);
-        caixaOcupacao.setText("OCUPAÇÃO");
+        // caixaOcupacao.setText("OCUPAÇÃO");
         
         JLabel textTempoRua = new JLabel("Tempo de rua: ");
         textTempoRua.setBounds(670, 100, 100, 30);
@@ -100,7 +100,7 @@ public class Cadastro extends JFrame {
         caixaTempoRua = new JTextField();
         caixaTempoRua.setBounds(670, 130, 110, 30);
         caixaTempoRua.setFont(FONT_PADRAO);
-        caixaTempoRua.setText(Integer.toString(4));
+        // caixaTempoRua.setText(Integer.toString(4));
         
         // Botão Cadastrar
         JButton buttonCadastro = new JButton("Cadastrar");
@@ -116,13 +116,8 @@ public class Cadastro extends JFrame {
         
         // Tabela
         tableModel = new DefaultTableModel(new String[]{
-            // "Local",
             "Nome",
             "Data",
-            // "Sexo",
-            // "Idade",
-            // "Ocupação",
-            // "Tempo de Rua"
         }, 0);
         JTable table = new JTable(tableModel);
         tabelaScrollPane = new JScrollPane(table);
@@ -152,6 +147,8 @@ public class Cadastro extends JFrame {
         return panelCadastro;
     }
 
+    //TRATATIVA DE DADOS ANTES DE LANÇAR NO CSV
+
     private void cadastrarPessoa() {
         String local = caixaLocal.getText();
         String data = caixaData.getText();
@@ -161,55 +158,62 @@ public class Cadastro extends JFrame {
         String ocupacao = caixaOcupacao.getText();
         int tempoDeRua = Integer.parseInt(caixaTempoRua.getText());
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(CAMINHO_ARQUIVO, true))) {
-            Pessoa pessoa = new Pessoa();
-            pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
-            
-            writer.println(pessoa.getPessoa());
+        // Verifica se os campos estão vazios
+        // if (local.isEmpty() || data.isEmpty() || nome.isEmpty() || ocupacao.isEmpty()) {
+        //     JOptionPane.showMessageDialog(this, "Campos não podem estar vazios!", "Erro", JOptionPane.INFORMATION_MESSAGE);
+        // else {}
 
-            // JOptionPane.showMessageDialog(this, "Dados salvos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            // limparCampos();
-            // atualizarTabela(); // Atualiza a tabela com os novos dados
-
-            dispose();
-            new Cadastro();
-
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao salvar os dados: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
+            // Escreve no csv
+            try (PrintWriter writer = new PrintWriter(new FileWriter(CAMINHO_ARQUIVO, true))) {
+                Pessoa pessoa = new Pessoa();
+                
+                pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
+                
+                writer.println(pessoa.getPessoa());
+                writer.flush(); // Garantir que os dados sejam gravados imediatamente
+                
+                atualizarTabela(); // Atualiza a tabela com os novos dados
+                limparCampos(); // Limpa os campos após cadastro
+    
+                JOptionPane.showMessageDialog(this, "Dados salvos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Erro ao salvar os dados: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
     }
-
+    
     private void limparCampos() {
         caixaLocal.setText("Casa do Povo da Rua");
         caixaData.setText("18/05/2024");
-        caixaNome.setText("");
-        caixaIdade.setText("");
-        caixaOcupacao.setText("");
-        caixaTempoRua.setText("");
+        caixaNome.setText("Nome teste Ç~çãõ~eü");
+        caixaIdade.setText("60");
+        caixaOcupacao.setText("OCUPAÇÃO");
+        caixaTempoRua.setText("5");
         comboBoxSexo.setSelectedIndex(0);
         System.out.println("Campos limpos"); // Remover depois
     }
 
+    // Ler no csv
     public ArrayList<Pessoa> listarDados() {
         ArrayList<Pessoa> lista = new ArrayList<>();
-
+    
         try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
             String linha;
             while ((linha = leitor.readLine()) != null) {
                 String[] partes = linha.split(",");
-
-                // String local = partes[0];
+    
+                String local = partes[0];
                 String data = partes[1];
                 String nome = partes[2];
-                // String sexo = partes[3];
-                // int idade = Integer.parseInt(partes[4]);
-                // String ocupacao = partes[5];
-                // int tempoDeRua = Integer.parseInt(partes[6]);
-
+                String sexo = partes[3];
+                int idade = Integer.parseInt(partes[4]);
+                String ocupacao = partes[5];
+                int tempoDeRua = Integer.parseInt(partes[6]);
+    
                 Pessoa pessoa = new Pessoa();
-                pessoa.setPessoaCadastro(nome,data);
 
+                pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
+    
                 lista.add(pessoa);
             }
         } catch (IOException e) {

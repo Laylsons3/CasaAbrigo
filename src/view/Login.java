@@ -25,11 +25,11 @@ public class Login extends JFrame {
 	private JPasswordField password;
 
 	public Login() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Login - Casa do Povo da Rua");
-		setResizable(false);
 		setBounds(100, 100, 815, 532);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
+		setResizable(false);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -102,15 +102,6 @@ public class Login extends JFrame {
 		entrar.setFont(new Font("Poppins", Font.PLAIN, 16));
 		entrar.setBounds(213, 114, 85, 34);
 		caixaLogin.add(entrar);
-		
-		/** TEMOS QUE DECIDIR SOBRE ESSA FUNÇÃO
-		 * 
-		 JLabel labelCriarUsuario = new JLabel("Recuperar senha");
-		 labelCriarUsuario.setHorizontalAlignment(SwingConstants.RIGHT);
-		 labelCriarUsuario.setFont(new Font("Poppins", Font.PLAIN, 10));
-		 labelCriarUsuario.setBounds(193, 182, 105, 13);
-		 caixaLogin.add(labelCriarUsuario);
-		 */
 
 	}
 	
