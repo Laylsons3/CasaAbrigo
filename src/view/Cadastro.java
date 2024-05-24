@@ -9,6 +9,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class Cadastro extends JFrame {
 
@@ -57,6 +59,15 @@ public class Cadastro extends JFrame {
         panelCadastro.add(textData);
 
         caixaData = new JTextField();
+        caixaData.setForeground(new Color(128, 128, 128));
+        caixaData.setText("dd/mm/aaaa");
+        caixaData.addFocusListener(new FocusAdapter() {
+        	@Override
+        	public void focusGained(FocusEvent e) {
+        		caixaData.setText("");
+                caixaData.setForeground(new Color(0, 0, 0));
+        	}
+        });
         caixaData.setBounds(70, 40, 300, 30);
         caixaData.setFont(FONT_PADRAO);
         panelCadastro.add(caixaData);
