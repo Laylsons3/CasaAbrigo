@@ -32,10 +32,32 @@ public class Cadastro extends JFrame {
 
         tabbedPane = new JTabbedPane();
         JPanel cadastroPanel = createCadastroPanel();
+        JPanel relatorioPanel = createRelatorioPanel();
         tabbedPane.addTab("Cadastro", cadastroPanel);
+        tabbedPane.addTab("Relatorio", relatorioPanel);
         getContentPane().add(tabbedPane);
 
         setVisible(true);
+    }
+
+    private JPanel createRelatorioPanel() {
+        JPanel panelRelatorio = new JPanel();
+        panelRelatorio.setLayout(null);
+
+        // Tabela
+        tableModel = new DefaultTableModel(new String[]{
+            "Nome",
+            "Data",
+        }, 0);
+        JTable table = new JTable(tableModel);
+        tabelaScrollPane = new JScrollPane(table);
+        tabelaScrollPane.setBounds(10, 59, 770, 467);
+        tabelaScrollPane.setVisible(true);
+        panelRelatorio.add(tabelaScrollPane, BorderLayout.CENTER);
+
+        atualizarTabela(); // Carrega os dados iniciais
+
+        return panelRelatorio;
     }
 
     private JPanel createCadastroPanel() {
@@ -174,25 +196,25 @@ public class Cadastro extends JFrame {
             
             // Escreve no csv
             try (PrintWriter writer = new PrintWriter(new FileWriter(CAMINHO_ARQUIVO, true))) {
-                    Pessoa pessoa = new Pessoa();
-                
-                    // Converte os dados para o formato do objeto
-                    pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
-                
-                    // Escreve no arquivo de texto em seguida faz uma quebra de linha
-                    writer.println(pessoa.getPessoa());
-                    // Faz com que os dados armazenados no buffer sejam enviados imediatamente ao destino
-                    writer.flush();
-                
-                    atualizarTabela(); // Atualiza a tabela com os novos dados
-                    limparCampos(); // Limpa os campos após cadastro
+                Pessoa pessoa = new Pessoa();
+            
+                // Converte os dados para o formato do objeto
+                pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
+            
+                // Escreve no arquivo de texto em seguida faz uma quebra de linha
+                writer.println(pessoa.getPessoa());
+                // Faz com que os dados armazenados no buffer sejam enviados imediatamente ao destino
+                writer.flush();
+            
+                atualizarTabela(); // Atualiza a tabela com os novos dados
+                limparCampos(); // Limpa os campos após cadastro
                 
                 } catch (IOException e) {
                         JOptionPane.showMessageDialog(this, "Erro ao salvar os dados: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                         e.printStackTrace();
-                    }
                 }
-            }
+        }
+    }
     
     private void limparCampos() {
         caixaNome.setText("");
@@ -200,6 +222,7 @@ public class Cadastro extends JFrame {
         caixaOcupacao.setText("");
         caixaTempoRua.setText("");
     }
+
 
     // Ler no csv
     public ArrayList<Pessoa> listarDados() {
