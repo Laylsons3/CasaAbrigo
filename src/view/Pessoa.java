@@ -1,5 +1,5 @@
 package view;
-// import java.util.Vector;
+import java.util.Vector;
 
 public class Pessoa {
     private String local, nome, sexo, ocupacao;
@@ -30,16 +30,16 @@ public class Pessoa {
         return new Object[]{nome, data};
     }
 
-    // public Vector<String> toArray() {
-    //     Vector<String> vetor = new Vector<>();
-    //     vetor.add(nome);
-    //     vetor.add(data);
-    //     vetor.add(local);
-    //     vetor.add(sexo);
-    //     vetor.add(String.valueOf(idade));
-    //     vetor.add(ocupacao);
-    //     vetor.add(String.valueOf(tempoDeRua));
-    //     vetor.add(usuario);
-    //     return vetor;
-    // }
+    public Vector<String> toArrayCompleto() {
+        Vector<String> vetor = new Vector<>();
+        vetor.add(nome);
+        vetor.add(data);
+        vetor.add(local);
+        vetor.add(sexo);
+        vetor.add(String.valueOf(idade));
+        vetor.add(ocupacao);
+        vetor.add(String.valueOf(tempoDeRua));
+        vetor.add(usuario);
+        return vetor;
+    }
 }

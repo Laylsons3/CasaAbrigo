@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Cadastro extends JFrame {
 
@@ -20,9 +22,12 @@ public class Cadastro extends JFrame {
 
     private JTabbedPane tabbedPane;
     private JTextField caixaLocal, caixaData, caixaNome, caixaIdade, caixaOcupacao, caixaTempoRua;
+    private JTextField caixaPesquisa;
     private JComboBox<String> comboBoxSexo;
     private JScrollPane tabelaScrollPane;
-    private DefaultTableModel tableModel;
+    private DefaultTableModel tableModelCadastro, tableModelRelatorio;
+
+    public String pesquisa;
 
     public Cadastro() {
         setTitle("Cadastro - Casa do Povo da Rua");
@@ -45,17 +50,46 @@ public class Cadastro extends JFrame {
         panelRelatorio.setLayout(null);
 
         // Tabela
-        tableModel = new DefaultTableModel(new String[]{
-            "Nome",
+        tableModelRelatorio = new DefaultTableModel(new String[]{
             "Data",
+            "Quantidade",
+            "Local",
+            "Responsável",
         }, 0);
-        JTable table = new JTable(tableModel);
+        JTable table = new JTable(tableModelRelatorio);
         tabelaScrollPane = new JScrollPane(table);
         tabelaScrollPane.setBounds(10, 59, 770, 467);
         tabelaScrollPane.setVisible(true);
         panelRelatorio.add(tabelaScrollPane, BorderLayout.CENTER);
+        
+        JLabel pesquisaLabel = new JLabel("Pesquisar:");
+        pesquisaLabel.setBounds(10, 10, 76, 13);
+        panelRelatorio.add(pesquisaLabel);
+        
+        caixaPesquisa = new JTextField();
+        caixaPesquisa.setBounds(85, 7, 170, 19);
+        panelRelatorio.add(caixaPesquisa);
+        
+        JButton buttonPesquisa = new JButton("Buscar");
+        buttonPesquisa.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		pesquisar();
+        	}
+        });
+        buttonPesquisa.setBounds(269, 6, 85, 21);
+        panelRelatorio.add(buttonPesquisa);
+        
+        JButton btnLimparPesquisa = new JButton("Limpar");
+        btnLimparPesquisa.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		atualizarTabelaRelatorio();
+                caixaPesquisa.setText("");
+        	}
+        });
+        btnLimparPesquisa.setBounds(368, 6, 85, 21);
+        panelRelatorio.add(btnLimparPesquisa);
 
-        atualizarTabela(); // Carrega os dados iniciais
+        atualizarTabelaRelatorio(); // Carrega os dados iniciais
 
         return panelRelatorio;
     }
@@ -160,11 +194,11 @@ public class Cadastro extends JFrame {
         panelCadastro.add(buttonLimpar);
         
         // Tabela
-        tableModel = new DefaultTableModel(new String[]{
+        tableModelCadastro = new DefaultTableModel(new String[]{
             "Nome",
             "Data",
         }, 0);
-        JTable table = new JTable(tableModel);
+        JTable table = new JTable(tableModelCadastro);
         tabelaScrollPane = new JScrollPane(table);
         tabelaScrollPane.setBounds(10, 218, 770, 308);
         tabelaScrollPane.setVisible(true);
@@ -175,12 +209,10 @@ public class Cadastro extends JFrame {
         return panelCadastro;
     }
 
-    //TRATATIVA DE DADOS ANTES DE LANÇAR NO CSV
-
     private void cadastrarPessoa() {
         String local = caixaLocal.getText();
         String data = caixaData.getText();
-        String nome = caixaNome.getText();
+        String nome = caixaNome.getText().toUpperCase();
         String sexo = (String) comboBoxSexo.getSelectedItem();
         String ocupacao = caixaOcupacao.getText();
         String idadeStr = caixaIdade.getText();
@@ -207,6 +239,8 @@ public class Cadastro extends JFrame {
                 writer.flush();
             
                 atualizarTabela(); // Atualiza a tabela com os novos dados
+                atualizarTabelaRelatorio();
+
                 limparCampos(); // Limpa os campos após cadastro
                 
                 } catch (IOException e) {
@@ -223,16 +257,13 @@ public class Cadastro extends JFrame {
         caixaTempoRua.setText("");
     }
 
-
     // Ler no csv
     public ArrayList<Pessoa> listarDados() {
         ArrayList<Pessoa> lista = new ArrayList<>();
-    
         try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
             String linha;
             while ((linha = leitor.readLine()) != null) {
                 String[] partes = linha.split(",");
-    
                 String local = partes[0];
                 String data = partes[1];
                 String nome = partes[2];
@@ -240,11 +271,73 @@ public class Cadastro extends JFrame {
                 int idade = Integer.parseInt(partes[4]);
                 String ocupacao = partes[5];
                 int tempoDeRua = Integer.parseInt(partes[6]);
-    
                 Pessoa pessoa = new Pessoa();
-
                 pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
+                lista.add(pessoa);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public void pesquisar() {
+        pesquisa = caixaPesquisa.getText().toUpperCase();
+        atualizarTabelaFiltrada();
+    }
+
+    private void atualizarTabelaFiltrada() {
+        tableModelRelatorio.setRowCount(0); // Limpa a tabela atual
+        ArrayList<Pessoa> dados = listarDadosFiltrados();
+        for (Pessoa pessoa : dados) {
+            tableModelRelatorio.addRow(pessoa.toArrayCompleto());
+        }
+    }
+
+    public ArrayList<Pessoa> listarDadosFiltrados() {
+        ArrayList<Pessoa> lista = new ArrayList<>();
+        try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
+            String linha;
+            while ((linha = leitor.readLine()) != null) {
+                String[] partes = linha.split(",");
+                String nome = partes[2].toUpperCase();
+                if (nome.contains(pesquisa)) {
+                    // System.out.println("Pesquisa confere");
+                
+                    String local = partes[0];
+                    String data = partes[1];
+                    String sexo = partes[3];
+                    int idade = Integer.parseInt(partes[4]);
+                    String ocupacao = partes[5];
+                    int tempoDeRua = Integer.parseInt(partes[6]);
+        
+                    Pessoa pessoa = new Pessoa();
     
+                    pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
+                    lista.add(pessoa);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public ArrayList<Pessoa> listarDadosRelatorio() {
+        ArrayList<Pessoa> lista = new ArrayList<>();
+        try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
+            String linha;
+            while ((linha = leitor.readLine()) != null) {
+                String[] partes = linha.split(",");
+                String local = partes[0];
+                String data = partes[1];
+                String nome = partes[2];
+                String sexo = partes[3];
+                int idade = Integer.parseInt(partes[4]);
+                String ocupacao = partes[5];
+                int tempoDeRua = Integer.parseInt(partes[6]);
+                Pessoa pessoa = new Pessoa();
+                pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
                 lista.add(pessoa);
             }
         } catch (IOException e) {
@@ -254,10 +347,18 @@ public class Cadastro extends JFrame {
     }
 
     private void atualizarTabela() {
-        tableModel.setRowCount(0); // Limpa a tabela atual
+        tableModelCadastro.setRowCount(0); // Limpa a tabela atual antes de atualizar
         ArrayList<Pessoa> dados = listarDados();
         for (Pessoa pessoa : dados) {
-            tableModel.addRow(pessoa.toArray());
+            tableModelCadastro.addRow(pessoa.toArray());
+        }
+    }
+
+    private void atualizarTabelaRelatorio() {
+        tableModelRelatorio.setRowCount(0); // Limpa a tabela atual antes de atualizar
+        ArrayList<Pessoa> dados = listarDadosRelatorio();
+        for (Pessoa pessoa : dados) {
+            tableModelRelatorio.addRow(pessoa.toArrayCompleto());
         }
     }
 
