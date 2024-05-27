@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -143,6 +144,7 @@ public class PanelCadastro extends JFrame {
         // Botão Cadastrar
         JButton buttonCadastro = new JButton("Cadastrar");
         buttonCadastro.setBounds(670, 170, 110, 40);
+        buttonCadastro.setForeground(new Color(0,0,255));
         buttonCadastro.setFont(FONT_PADRAO);
         buttonCadastro.addActionListener(e -> cadastrarPessoa());
         panelCadastro.add(buttonCadastro);
@@ -150,6 +152,7 @@ public class PanelCadastro extends JFrame {
         // Botão Limpar Campos
         JButton buttonLimpar = new JButton("Limpar");
         buttonLimpar.setBounds(550, 170, 110, 40);
+        buttonLimpar.setForeground(new Color(255,0,0));
         buttonLimpar.setFont(FONT_PADRAO);
         buttonLimpar.addActionListener(e -> limparCampos());
         panelCadastro.add(buttonLimpar);

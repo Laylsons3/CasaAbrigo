@@ -41,7 +41,6 @@ public class Cadastro extends JFrame {
         PanelCadastro cadastro = new PanelCadastro();
         JPanel cadastroPanel = cadastro.createCadastroPanel();
 
-
         JPanel pesquisaPanel = createPesquisaPanel();
         Relatorio relatorio = new Relatorio();
         JPanel relatorioPanel = relatorio.relatorioPanel();
