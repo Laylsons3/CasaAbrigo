@@ -22,7 +22,7 @@ public class Relatorio extends JFrame {
         formatExport = new JLabel("Formato: ");
         formatExport.setBounds(10, 10, 130, 25);
         formatExport.setFont(FONT_PADRAO);
-        String[] opcoesFormatos = {"Excel (.xlsx)", "CSV"};
+        String[] opcoesFormatos = { "CSV"};
         panelRelatorio.add(formatExport);
 
         formatoCombo = new JComboBox<>(opcoesFormatos);
@@ -58,6 +58,7 @@ public class Relatorio extends JFrame {
                     caminhoArquivo += ".xlsx";
                 }
                 exportarParaExcel(caminhoArquivo);
+
             } else if ("CSV".equals(formato)) {
                 if (!caminhoArquivo.toLowerCase().endsWith(".csv")) {
                     caminhoArquivo += ".csv";
@@ -87,8 +88,28 @@ public class Relatorio extends JFrame {
         }
     }
 
-    private ArrayList<Pessoa> listarDados() {
-        // Implementação do seu método listarDados
-        return new ArrayList<>();
+    public ArrayList<Pessoa> listarDados() {
+        ArrayList<Pessoa> lista = new ArrayList<>();
+        try (BufferedReader leitor = new BufferedReader(new FileReader("dados.csv"))) {
+            String linha;
+            while ((linha = leitor.readLine()) != null) {
+
+                    String[] partes = linha.split(",");
+
+                    String local = partes[0];
+                    String data = partes[1];
+                    String nome = partes[2];
+                    String sexo = partes[3];
+                    int idade = Integer.parseInt(partes[4]);
+                    String ocupacao = partes[5];
+                    int tempoDeRua = Integer.parseInt(partes[6]);
+                    Pessoa pessoa = new Pessoa();
+                    pessoa.setPessoa(local, nome, sexo, ocupacao, data, idade, tempoDeRua);
+                    lista.add(0, pessoa);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lista;
     }
 }
