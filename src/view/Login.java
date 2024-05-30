@@ -48,7 +48,7 @@ public class Login extends JFrame {
 		panelEsquerdo.add(caixaImagemETitulo);
 				
 		JLabel labelImage = new JLabel("");
-		labelImage.setIcon(new ImageIcon("C:\\Users\\layls\\eclipse-workspace\\CasaAbrigo\\src\\assets\\logo-menor.jpg"));
+		labelImage.setIcon(new ImageIcon(Login.class.getResource("/assets/logo-menor.jpg")));
 		caixaImagemETitulo.add(labelImage);
 		
 		JLabel labelTitulo = new JLabel("CASA DO POVO DA RUA");
@@ -120,6 +120,10 @@ public class Login extends JFrame {
             JOptionPane.showMessageDialog(null, "Usuário ou senha incorretos");
         }
     }
+	}
+	
+	public static void main(String[] args) {
+		new Login();
 	}
 
 }
