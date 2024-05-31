@@ -3,8 +3,16 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.util.ArrayList;
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,7 +21,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 
 public class Cadastro extends JFrame {
 
@@ -33,7 +40,7 @@ public class Cadastro extends JFrame {
     private JComboBox<String> formatoCombo;
     private JLabel formatExport;
     private JButton btnSalvar;
-
+    
     public String pesquisa;
 
     public Cadastro() {
@@ -137,22 +144,22 @@ public class Cadastro extends JFrame {
             @Override
             public void keyReleased(KeyEvent e) {
                 String text = caixaData.getText();
-        
-                // Remove todos os caracteres não numéricos, exceto barras
+
+                // Deixa só os numeros e a barra na caixa de texto
                 text = text.replaceAll("[^0-9/]", "");
-        
-                // Adiciona barras no formato dd/MM/yyyy
+
+                // Adiciona barras no formato dd/mm/aaaa
                 if (text.length() == 2 && !text.contains("/")) {
                     text = text + "/";
                 } else if (text.length() == 5 && text.indexOf('/', 3) == -1) {
                     text = text.substring(0, 3) + text.substring(3) + "/";
                 }
-        
+
                 // Limita o comprimento do texto a 10 caracteres
                 if (text.length() > 10) {
                     text = text.substring(0, 10);
                 }
-        
+
                 // Atualiza o texto no JTextField
                 caixaData.setText(text);
             }
@@ -254,12 +261,12 @@ public class Cadastro extends JFrame {
 
     public JPanel createRelatorioPanel() {
         JPanel panelRelatorio = new JPanel();
-        panelRelatorio.setLayout(null); // Adicione esta linha para permitir o uso de setBounds
+        panelRelatorio.setLayout(null); // Aqui permite colocar as caixas em qualquer lugar da tela com setBounds
 
         formatExport = new JLabel("Formato: ");
         formatExport.setBounds(10, 10, 130, 25);
         formatExport.setFont(FONT_PADRAO);
-        String[] opcoesFormatos = { "CSV"};
+        String[] opcoesFormatos = {"Excel (.xlsx)", "CSV"};
         panelRelatorio.add(formatExport);
 
         formatoCombo = new JComboBox<>(opcoesFormatos);
@@ -461,8 +468,39 @@ public class Cadastro extends JFrame {
         }
     }
 
-    private void exportarParaExcel(String caminhoArquivo) {
-        // Fazer conversão para excel
+ private void exportarParaExcel(String caminhoArquivo) {
+        ArrayList<Pessoa> dados = listarDados();
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Relatório");
+
+            Row headerRow = sheet.createRow(0);
+            String[] colunas = {"Local", "Data", "Nome", "Sexo", "Idade", "Ocupação", "Tempo de Rua"};
+            for (int i = 0; i < colunas.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(colunas[i]);
+            }
+
+            int rowNum = 1;
+            for (Pessoa pessoa : dados) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(pessoa.getLocal());
+                row.createCell(1).setCellValue(pessoa.getData());
+                row.createCell(2).setCellValue(pessoa.getNome());
+                row.createCell(3).setCellValue(pessoa.getSexo());
+                row.createCell(4).setCellValue(pessoa.getIdade());
+                row.createCell(5).setCellValue(pessoa.getOcupacao());
+                row.createCell(6).setCellValue(pessoa.getTempoDeRua());
+            }
+
+            try (FileOutputStream fileOut = new FileOutputStream(caminhoArquivo)) {
+                workbook.write(fileOut);
+            }
+
+            JOptionPane.showMessageDialog(this, "Arquivo Excel exportado com sucesso!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao exportar arquivo Excel: " + e.getMessage());
+        }
     }
 
     private void exportarParaCSV(String caminhoArquivo) {
