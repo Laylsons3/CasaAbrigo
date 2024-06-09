@@ -19,6 +19,13 @@
       <artifactId>commons-csv</artifactId>
       <version>1.10.0</version>
     </dependency>
+    <!-- JDBC -->
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.36.0.3</version>
+  </dependency>
+  
   </dependencies>
 
   <build>

@@ -12,7 +12,6 @@ import javax.swing.JButton;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.SwingConstants;
-import javax.swing.ImageIcon;
 
 public class Login extends JFrame {
 	
@@ -48,7 +47,6 @@ public class Login extends JFrame {
 		panelEsquerdo.add(caixaImagemETitulo);
 				
 		JLabel labelImage = new JLabel("");
-		labelImage.setIcon(new ImageIcon(Login.class.getResource("/assets/logo-menor.jpg")));
 		caixaImagemETitulo.add(labelImage);
 		
 		JLabel labelTitulo = new JLabel("CASA DO POVO DA RUA");
