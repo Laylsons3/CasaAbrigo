@@ -422,15 +422,11 @@ public class Cadastro extends JFrame {
                 sql = "SELECT * FROM pessoas WHERE UPPER(nome) LIKE ? AND sexo = '"+ comboBoxFiltro.getSelectedItem() + "' AND data = '" + caixaDataPesquisa.getText() +"'";
             }
         }
-        boolean isDataFilter = false;
     
         try (Connection conn = ConexaoBanco.conectar();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + pesquisa.toUpperCase() + "%");
-            if (isDataFilter) {
-                pstmt.setString(2, caixaDataPesquisa.getText());
-            }
             ResultSet rs = pstmt.executeQuery();
             
             while (rs.next()) {
