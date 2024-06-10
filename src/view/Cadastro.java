@@ -61,17 +61,15 @@ public class Cadastro extends JFrame {
 
         JPanel pesquisaPanel = createPesquisaPanel();
         JPanel cadastroPanel = createCadastroPanel();
-        JPanel relatorioPanel = createRelatorioPanel();
         JPanel exportarPanel = createExportarPanel();
 
         tabbedPane.addTab("Cadastro", cadastroPanel);
         tabbedPane.addTab("Pesquisa", pesquisaPanel);
-        tabbedPane.addTab("Relatorios", relatorioPanel);
         tabbedPane.addTab("Exportar", exportarPanel);
 
         getContentPane().add(tabbedPane);
 
-        tabbedPane.setSelectedIndex(1); // Lembrar de tirar
+        // tabbedPane.setSelectedIndex(1); // Lembrar de tirar
 
         setVisible(true);
     }
@@ -80,7 +78,6 @@ public class Cadastro extends JFrame {
         JPanel panelPesquisa = new JPanel();
         panelPesquisa.setLayout(null);
 
-        // Tabela
         tableModelRelatorio = new DefaultTableModel(new String[]{
             "Nome",
             "Data",
@@ -90,7 +87,7 @@ public class Cadastro extends JFrame {
 
         JTable table = new JTable(tableModelRelatorio);
         tabelaScrollPane = new JScrollPane(table);
-        tabelaScrollPane.setBounds(10, 72, 770, 488);
+        tabelaScrollPane.setBounds(10, 42, 770, 488);
         tabelaScrollPane.setVisible(true);
         panelPesquisa.add(tabelaScrollPane, BorderLayout.CENTER);
         
@@ -113,8 +110,12 @@ public class Cadastro extends JFrame {
         comboBoxFiltro.setBackground(new Color(255,255,255));
         panelPesquisa.add(comboBoxFiltro);
 
+        JLabel textDataPesquisa = new JLabel("Data: ");
+        textDataPesquisa.setBounds(450, 7, 100, 21);
+        panelPesquisa.add(textDataPesquisa);
+
         caixaDataPesquisa = new JTextField("");
-        caixaDataPesquisa.setBounds(460, 7, 120, 21);
+        caixaDataPesquisa.setBounds(490, 7, 100, 21);
         caixaDataPesquisa.setFont(FONT_PADRAO);
         panelPesquisa.add(caixaDataPesquisa);
         caixaDataPesquisa.addKeyListener(new KeyAdapter() {
@@ -251,6 +252,14 @@ public class Cadastro extends JFrame {
         caixaTempoRua.setBounds(670, 130, 110, 30);
         caixaTempoRua.setFont(FONT_PADRAO);
         panelCadastro.add(caixaTempoRua);
+        caixaTempoRua.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    cadastrarPessoa();
+                }
+            }
+        });
         
         JButton buttonCadastro = new JButton("Cadastrar");
         buttonCadastro.setBounds(670, 170, 110, 30);
@@ -313,18 +322,6 @@ public class Cadastro extends JFrame {
         return panelExportar;
     }
     
-    public JPanel createRelatorioPanel() {
-
-        JPanel panelRelatorios = new JPanel();
-        panelRelatorios.setLayout(null);
-
-        JLabel pesquisaLabel = new JLabel("Relatórios");
-        pesquisaLabel.setBounds(10, 10, 76, 13);
-        panelRelatorios.add(pesquisaLabel);
-
-        return panelRelatorios;
-    }
-
     private void cadastrarPessoa() {
         String local = LOCAL;
         String data = caixaData.getText();
@@ -345,6 +342,7 @@ public class Cadastro extends JFrame {
                 atualizarTabela();
                 atualizarTabelaRelatorio();
                 limparCampos();
+                caixaNome.requestFocus();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Erro ao salvar os dados: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
@@ -388,17 +386,13 @@ public class Cadastro extends JFrame {
 
     public void pesquisar() {
         pesquisa = caixaPesquisa.getText().toUpperCase();
-        if (comboBoxFiltro.getSelectedItem().equals("Data") && caixaDataPesquisa.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Insira a data ou mude o filtro!", "Erro", JOptionPane.ERROR_MESSAGE);
-        } else {
-            atualizarTabelaFiltrada();
-        }
+        atualizarTabelaFiltrada();
     }
 
     private void atualizarTabelaFiltrada() {
         tableModelRelatorio.setRowCount(0);
         ArrayList<Pessoa> dados = listarDadosFiltrados();
-        for (int i = 0; i < dados.size() && i < 17; i++) {
+        for (int i = 0; i < dados.size(); i++) {
             Pessoa pessoa = dados.get(i);
             tableModelRelatorio.addRow(pessoa.toArray());
         }
@@ -409,17 +403,17 @@ public class Cadastro extends JFrame {
         String sql = null;
         if (caixaDataPesquisa.getText().length() == 0) {
             if (comboBoxFiltro.getSelectedItem().equals("Todos")) {
-                sql = "SELECT * FROM pessoas WHERE UPPER(nome) LIKE ?";
+                sql = "SELECT * FROM pessoas WHERE UPPER(nome) LIKE ? ORDER BY nome ASC";
             } else {
-                sql = "SELECT * FROM pessoas WHERE UPPER(nome) LIKE ? AND sexo = '"+ comboBoxFiltro.getSelectedItem() + "'";
+                sql = "SELECT * FROM pessoas WHERE UPPER(nome) LIKE ? AND sexo = '"+ comboBoxFiltro.getSelectedItem() + "' ORDER BY nome ASC";
             }
         } else if (caixaDataPesquisa.getText().length() < 10) {
             JOptionPane.showMessageDialog(this, "Digite a data corretamente.", "Erro", JOptionPane.ERROR_MESSAGE);
         } else {
             if (comboBoxFiltro.getSelectedItem().equals("Todos")) {
-                sql = "SELECT * FROM pessoas WHERE UPPER(nome) LIKE ? AND data = '" + caixaDataPesquisa.getText() +  "'";
+                sql = "SELECT * FROM pessoas WHERE UPPER(nome) LIKE ? AND data = '" + caixaDataPesquisa.getText() +  "' ORDER BY nome ASC";
             } else {
-                sql = "SELECT * FROM pessoas WHERE UPPER(nome) LIKE ? AND sexo = '"+ comboBoxFiltro.getSelectedItem() + "' AND data = '" + caixaDataPesquisa.getText() +"'";
+                sql = "SELECT * FROM pessoas WHERE UPPER(nome) LIKE ? AND sexo = '"+ comboBoxFiltro.getSelectedItem() + "' AND data = '" + caixaDataPesquisa.getText() +"' ORDER BY nome ASC";
             }
         }
     
