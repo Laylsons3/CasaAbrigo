@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-O CasaAbrigo é um projeto para cadastro de fluxo de entrada e saída de moradores de rua e também serve para ter um controle quantitativo mensal. Utilizando uma combinação de tecnologias como Java Swing, Banco de Dados SQLite e ferramentas de desenvolvimento robustas, este projeto visa proporcionar uma melhor experiência e uma melhor organização para a ONG Casa do Povo da Rua
+O CasaAbrigo é um projeto para cadastro de fluxo de entrada e saída de moradores de rua e também serve para ter um controle quantitativo. Utilizando uma combinação de tecnologias como Java Swing, Banco de Dados SQLite e ferramentas de desenvolvimento robustas, este projeto visa proporcionar uma melhor experiência e uma melhor organização para a ONG Casa do Povo da Rua
 
 ## Tecnologias Utilizadas
 
